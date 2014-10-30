@@ -1,0 +1,12 @@
+<div id="main" ng-controller="ProjectsCtrl">
+  <header class="page-header">
+    <h1>SIMPLE TODO LISTS<br/><small>FROM RUBY GARAGE</small></h1>
+  </header>
+  <div id="projects-container" class="ng-scope panel panel-default" ng-repeat="project in projects | orderBy: 'created_at':true">
+    <div class="panel-heading">
+      <a class="project-name" href="#" value="{{project.id}}" data-url="/projects/{{project.id}}" onaftersave="updateTitle()" editable-text="project.title">{{project.title}}</a>
+    </div>
+  </div>
+  <button ng-click="addProject()" type="button" class="btn btn-primary">Add TODO List</button>
+  <%= link_to "Sign Out", destroy_user_session_path, method: :delete %>
+</div>
