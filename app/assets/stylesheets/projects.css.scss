@@ -18,7 +18,8 @@
 
 .panel-body {
   padding: 6px 5px 6px 5px !important;
-  box-shadow: 0px 1px 1px #E3E3E3 inset;
+  box-shadow: 0px 2px 1px #3154B5 inset;
+  background-color: #D9D9D9; 
 }
 
 .panel-body .glyphicon-plus {
@@ -31,19 +32,61 @@
 .panel-body .input-group {
   width: 93%;
   margin: auto;
-  
 }
 
-#projects-container {
+.panel-body .input-group input {
+  border-style: inset !important;
+  border-radius: 0px !important;
+  border: none !important;
+  box-shadow: 1px 2px 1px #B3B3B3 inset !important;  
+}
+
+.panel-body .input-group button {
+  background-color: #239C0E;
+  color: white;
+  border: 1px solid black;
+  border-style: outset;
+}
+
+.panel-body .input-group button:hover {
+  border-style: ridge;
+}
+
+.panel-body .input-group button:active {
+  border-style: inset;
+}
+
+.projects-container {
   width: 60em;
   margin: auto;
-  margin-bottom: 3em;
+  margin-bottom: 3em !important;
+  box-shadow: 0px 1px 1px black !important;
+  border: none !important;
+  border-radius: 0px 0px 10px 10px !important;
+}
+
+.projects-container a {
+  color: #E0E0E0;
+  font-size: 15px;
+}
+
+.projects-container a:hover {
+  color: black;
+  font-size: 15px;
 }
 
 .border {
-  border: 5px red;
+  border: 5px red !important;
 }
 
 .panel-heading {
-  box-shadow: 0px 1px 1px #E3E3E3 inset;
+  box-shadow: 0px 1px 1px #4170F0 inset !important;
+  background-color: #4170F0 !important;
+  border-radius: 0px !important;
+  border: none !important;
+}
+
+.panel-heading b {
+  color: white !important;
+  font-size: 17px;
 }

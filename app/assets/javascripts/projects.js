@@ -15,13 +15,6 @@ todoApp.controller('ProjectsCtrl', function ($scope, $http, $timeout) {
     $scope.projects = data;
   });
 
-  // $scope.sortableOptions = {
-  //   stop: function(e, ui) {
-  //     console.log(e);
-  //     console.log(ui);
-  //   }
-  // };    
-
   $scope.addProject = function(){
     $http.post("/projects", { project: { title: "Enter project name" } })
       .success(function(data, status, headers, config) {

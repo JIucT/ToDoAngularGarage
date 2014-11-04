@@ -5,15 +5,19 @@
 
 .tasks-table {
   text-align: left !important;
+  color: #858585;
 }
 
-.tasks-table > input {
-  width: 5%;
-  
+.tasks-table {
+  box-shadow: 0px 2px 1px #B3B3B3 inset !important;
 }
 
-.tasks-table tbody:first-child {
-  box-shadow: 0px 1px 1px #E3E3E3 inset !important;
+.tasks-table tbody .last-row:hover td:first-child {
+  border-bottom-left-radius: 10px !important; 
+}
+
+.tasks-table tbody .last-row:hover td:last-child {
+  border-bottom-right-radius: 10px !important;
 }
 
 .line-through-true {
@@ -22,4 +26,58 @@
 
 .line-through-false {
   text-decoration: none;
+}
+
+.task-completion {
+  width: 3%;
+  border-right: 1px solid #E3E3E3;
+}
+
+.td-space {
+  border: none;
+  max-width: 1px !important;
+  padding: 0px !important;
+}
+
+.task-actions {
+  width: 7%;
+  border-left: 1px solid #E3E3E3;
+}
+
+.task-data a, .task-actions a {
+  float: right;
+  margin: 0px 5px 0px 5px;
+}
+
+.task-data a {
+  position: relative;
+  left: 40px;
+}
+
+.task-data {
+  border-left: 1px solid #E3E3E3;  
+}
+
+.show-on-hover {
+  visibility: hidden;
+}
+
+.tasks-table tr:hover .show-on-hover, .panel-heading:hover .show-on-hover {
+  visibility: visible;
+};
+
+.tasks-table tr:hover td {
+  background-color: #FCF8D9 !important;
+}
+
+.tasks-table a {
+  color: #787878;
+}
+
+.tasks-table a:hover {
+  color: black;
+}
+
+.tasks-table td b {
+  margin-left: 10px;
 }

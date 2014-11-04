@@ -1,14 +1,14 @@
 <div id="main" ng-controller="ProjectsCtrl">
-  <header class="page-header">
+  <header class="">
     <h1>SIMPLE TODO LISTS<br/><small>FROM RUBY GARAGE</small></h1>
   </header>
-  <div id="projects-container" class="ng-scope panel panel-default text-left" ng-repeat="project in projects | orderBy: 'created_at':true">
+  <div class="projects-container ng-scope panel panel-default text-left" ng-repeat="project in projects | orderBy: 'created_at':true">
     <div class="panel-heading">
       <span class="glyphicon glyphicon-tasks"></span>
       <b class="project-name" data-value="{{project.id}}" editable-text="project.title" e-form="PojectTitleForm" onaftersave="updateTitle(poject.id)">{{project.title}}</b>
       <div class="pull-right">
-        <a href=""><span class="glyphicon glyphicon-pencil" ng-click="PojectTitleForm.$show()" ng-hide="PojectTitleForm.$visible"></span></a>
-        <a href="" ng-click="remove($event)"><span data-value="{{project.id}}" class="glyphicon glyphicon-trash"></span></a>
+        <a class="show-on-hover" href=""><span class="glyphicon glyphicon-pencil" ng-click="PojectTitleForm.$show()" ng-hide="PojectTitleForm.$visible"></span></a>
+        <a class="show-on-hover" href="" ng-click="remove($event)"><span data-value="{{project.id}}" class="glyphicon glyphicon-trash"></span></a>
       </div>
     </div>
     <div class="panel-body">
@@ -22,23 +22,24 @@
       </div><!-- /input-group -->
     </form>
     </div>    
-    <ul data-as-sortable="dragControlListeners" data-ng-model="project.tasks">
-      <li ng-repeat="task in project.tasks | orderBy: 'priority':true" data-as-sortable-item>   <!--| orderBy: 'priority':true  -->
-        <div data-as-sortable-item-handle>
+    <table class="table tasks-table" data-as-sortable="dragControlListeners" data-ng-model="project.tasks">
+      <tr ng-repeat="task in project.tasks | orderBy: 'priority':true" data-as-sortable-item ng-class="{'last-row':$last}">   
+        <td data-as-sortable-item-handle class="task-completion">
           <input type="checkbox" ng-model="task.completed" ng-change="changeTaskState(task)" />
-        </div>
-        <div data-as-sortable-item-handle class="unselectable">
+        </td>
+        <td class="td-space"></td>
+        <td data-as-sortable-item-handle class="unselectable task-data">
           <b id="{{task.id}}" class="unselectable line-through-{{task.completed}}" editable-text="task.title" e-form="TaskTitleForm" onaftersave="updateTaskTitle(task)">
             {{task.title}} {{task.priority}}
-          </b>
-        </div>
-        <div data-as-sortable-item-handle class="unselectable">
-          <a href=""><span class="glyphicon glyphicon-pencil" ng-click="TaskTitleForm.$show()" ng-hide="TaskTitleForm.$visible"></span></a>
-          <a href="" ng-click="removeTask($event, task, project)"><span class="glyphicon glyphicon-trash"></span></a>          
-        </div>        
-      </li>
-    </ul>    
+          </b>          
+          <a class="show-on-hover" href=""><span class="glyphicon glyphicon-pencil" ng-click="TaskTitleForm.$show()" ng-hide="TaskTitleForm.$visible"></span></a>
+        </td>
+        <td data-as-sortable-item-handle class="task-actions">
+          <a class="show-on-hover" href="" ng-click="removeTask($event, task, project)"><span class="glyphicon glyphicon-trash"></span></a>                    
+        </td>        
+      </tr>
+    </table>    
   </div>
   <button ng-click="addProject()" type="button" class="btn btn-primary">Add TODO List</button>
-  <%= link_to "Sign Out", destroy_user_session_path, method: :delete %>
+  <%= link_to "Sign Out", destroy_user_session_path, method: :delete, id: 'sign-out' %>
 </div>
