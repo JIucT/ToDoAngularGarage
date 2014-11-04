@@ -1,12 +1,11 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
-  skip_before_filter :verify_authenticity_token, only: [:create, :update]
 
   def index
-    @projects = Project.where(user_id: current_user.id).order("created_at DESC")
+    @projects = Project.includes(:tasks).where(user_id: current_user.id).order("created_at DESC")
     respond_to do |format|
       format.html
-      format.json { render json: @projects}
+      format.json { render json: @projects.to_json(include: :tasks) }
     end    
   end
 
@@ -21,6 +20,11 @@ class ProjectsController < ApplicationController
 
   def update
     Project.update(project_params[:id], title: project_params[:title])
+    render nothing: true, status: 200
+  end
+
+  def destroy
+    Project.destroy(params[:id])
     render nothing: true, status: 200
   end
 

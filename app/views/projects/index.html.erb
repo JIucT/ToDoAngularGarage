@@ -2,10 +2,42 @@
   <header class="page-header">
     <h1>SIMPLE TODO LISTS<br/><small>FROM RUBY GARAGE</small></h1>
   </header>
-  <div id="projects-container" class="ng-scope panel panel-default" ng-repeat="project in projects | orderBy: 'created_at':true">
+  <div id="projects-container" class="ng-scope panel panel-default text-left" ng-repeat="project in projects | orderBy: 'created_at':true">
     <div class="panel-heading">
-      <a class="project-name" href="#" value="{{project.id}}" data-url="/projects/{{project.id}}" onaftersave="updateTitle()" editable-text="project.title">{{project.title}}</a>
+      <span class="glyphicon glyphicon-tasks"></span>
+      <b class="project-name" data-value="{{project.id}}" editable-text="project.title" e-form="PojectTitleForm" onaftersave="updateTitle(poject.id)">{{project.title}}</b>
+      <div class="pull-right">
+        <a href=""><span class="glyphicon glyphicon-pencil" ng-click="PojectTitleForm.$show()" ng-hide="PojectTitleForm.$visible"></span></a>
+        <a href="" ng-click="remove($event)"><span data-value="{{project.id}}" class="glyphicon glyphicon-trash"></span></a>
+      </div>
     </div>
+    <div class="panel-body">
+      <span class="glyphicon glyphicon-plus pull-left"></span>
+      <form>
+      <div class="input-group">
+        <input placeholder="Start typing here to create a task..." type="text" data-name="{{project.id}}" class="task-name form-control">
+        <span class="input-group-btn">
+          <button type="submit" class="btn btn-default" data-value="{{project.id}}" ng-click="addTask($event, project)">Add Task</button>
+        </span>
+      </div><!-- /input-group -->
+    </form>
+    </div>    
+    <ul data-as-sortable="dragControlListeners" data-ng-model="project.tasks">
+      <li ng-repeat="task in project.tasks | orderBy: 'priority':true" data-as-sortable-item>   <!--| orderBy: 'priority':true  -->
+        <div data-as-sortable-item-handle>
+          <input type="checkbox" ng-model="task.completed" ng-change="changeTaskState(task)" />
+        </div>
+        <div data-as-sortable-item-handle class="unselectable">
+          <b id="{{task.id}}" class="unselectable line-through-{{task.completed}}" editable-text="task.title" e-form="TaskTitleForm" onaftersave="updateTaskTitle(task)">
+            {{task.title}} {{task.priority}}
+          </b>
+        </div>
+        <div data-as-sortable-item-handle class="unselectable">
+          <a href=""><span class="glyphicon glyphicon-pencil" ng-click="TaskTitleForm.$show()" ng-hide="TaskTitleForm.$visible"></span></a>
+          <a href="" ng-click="removeTask($event, task, project)"><span class="glyphicon glyphicon-trash"></span></a>          
+        </div>        
+      </li>
+    </ul>    
   </div>
   <button ng-click="addProject()" type="button" class="btn btn-primary">Add TODO List</button>
   <%= link_to "Sign Out", destroy_user_session_path, method: :delete %>

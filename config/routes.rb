@@ -4,9 +4,13 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-   root 'projects#index'
+  root 'projects#index'
 
-   resources :projects#, only: [:index]
+  resources :projects do#, only: [:index] do
+    resources :tasks do# only: []
+      patch 'update_task_prioity' => 'tasks#update_task_priority', on: :member
+    end
+  end
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

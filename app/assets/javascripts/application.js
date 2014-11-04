@@ -16,5 +16,6 @@
 //= require angular-animate
 //= require angular-resource
 //= require xeditable
+//= require ng-sortable
 //= require jquery_ujs
 //= require_tree .

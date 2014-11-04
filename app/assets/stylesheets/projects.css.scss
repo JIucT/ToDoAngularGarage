@@ -11,3 +11,39 @@
   display: block;
   margin-top: 13px;
 }
+
+.project-name {
+  margin-left: 20px;
+}
+
+.panel-body {
+  padding: 6px 5px 6px 5px !important;
+  box-shadow: 0px 1px 1px #E3E3E3 inset;
+}
+
+.panel-body .glyphicon-plus {
+  font-size: 30px;
+  color: #2B7820;
+  width: 5%;
+  text-align: center;
+}
+
+.panel-body .input-group {
+  width: 93%;
+  margin: auto;
+  
+}
+
+#projects-container {
+  width: 60em;
+  margin: auto;
+  margin-bottom: 3em;
+}
+
+.border {
+  border: 5px red;
+}
+
+.panel-heading {
+  box-shadow: 0px 1px 1px #E3E3E3 inset;
+}
