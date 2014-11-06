@@ -54,7 +54,9 @@ end
 
 group :test do
   gem 'capybara', '~> 2.4.4'
+  gem 'selenium-webdriver'
   gem 'capybara-webkit', '~> 1.3.1'
+  gem 'capybara-angular', '~> 0.0.4'
   gem 'database_cleaner', '~> 1.3.0'
   gem 'shoulda-matchers', '~> 2.7.0'
 end

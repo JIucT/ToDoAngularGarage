@@ -35,7 +35,7 @@
 
 .td-space {
   border: none;
-  max-width: 1px !important;
+  width: 5px !important;
   padding: 0px !important;
 }
 
@@ -51,7 +51,7 @@
 
 .task-data a {
   position: relative;
-  left: 40px;
+  left: 207px;/*40px;*/
 }
 
 .task-data {
@@ -80,4 +80,16 @@
 
 .tasks-table td b {
   margin-left: 10px;
+}
+
+.task-deadline {
+  width: 25%;
+  padding-top: 5px !important;
+  padding-bottom: 0px !important;
+  text-align: center !important;
+}
+
+.task-deadline .input-group {
+  margin: 0px; 
+  max-height: 10px !important;  
 }

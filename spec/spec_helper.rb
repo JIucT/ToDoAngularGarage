@@ -14,7 +14,23 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+ENV["RAILS_ENV"] ||= 'test'
+require File.expand_path("../../config/environment", __FILE__)
+require 'rspec/rails'
+# require 'capybara/rspec'
+# require 'capybara/rails'
+
+include Capybara::Angular::DSL
+include Warden::Test::Helpers
+Warden.test_mode!
+Capybara.default_wait_time = 30
+
+
 RSpec.configure do |config|
+
+  config.after(:each, :type => :feature) do
+    Warden.test_reset!
+  end
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
@@ -86,4 +102,35 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
+
+  config.use_transactional_fixtures = false
+
+
+
+  Capybara.javascript_driver = :selenium
+
+  config.before(:suite) do
+    # This says that before the entire test suite runs, clear the test database out completely.
+    # This gets rid of any garbage left over from interrupted or poorly-written tests - a common source of surprising test behavior.
+    DatabaseCleaner.clean_with(:truncation)
+   
+    # This part sets the default database cleaning strategy to be transactions.
+    # Transactions are very fast, and for all the tests where they do work - that is, any test where the entire test runs in the RSpec process - they are preferable.
+   # DatabaseCleaner.strategy = :transaction
+  end
+
+  config.before :each do
+    if Capybara.current_driver == :rack_test
+      DatabaseCleaner.strategy = :transaction
+    else
+      DatabaseCleaner.strategy = :truncation
+    end
+    DatabaseCleaner.start
+  end   
+  # These lines hook up database_cleaner around the beginning and end of each test,
+  # telling it to execute whatever cleanup strategy we selected beforehand.
+  
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
 end

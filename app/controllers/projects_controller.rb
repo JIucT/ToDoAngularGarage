@@ -19,12 +19,16 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    Project.update(project_params[:id], title: project_params[:title])
+    project = Project.find(project_params[:id])
+    authorize! :update, project
+    project.update(title: project_params[:title])
     render nothing: true, status: 200
   end
 
   def destroy
-    Project.destroy(params[:id])
+    project = Project.find(params[:id])
+    authorize! :destroy, project
+    project.destroy
     render nothing: true, status: 200
   end
 

@@ -35,9 +35,7 @@
 }
 
 .panel-body .input-group input {
-  border-style: inset !important;
-  border-radius: 0px !important;
-  border: none !important;
+  border-radius: 0px;
   box-shadow: 1px 2px 1px #B3B3B3 inset !important;  
 }
 
@@ -46,14 +44,17 @@
   color: white;
   border: 1px solid black;
   border-style: outset;
+  outline: none;
 }
 
 .panel-body .input-group button:hover {
   border-style: ridge;
+  outline: none;
 }
 
 .panel-body .input-group button:active {
   border-style: inset;
+  outline: none;
 }
 
 .projects-container {

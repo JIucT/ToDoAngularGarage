@@ -1,13 +1,13 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { omniauth_callbacks: "omniauth_callbacks" }
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
   root 'projects#index'
 
-  resources :projects do#, only: [:index] do
-    resources :tasks do# only: []
+  resources :projects, only: [:index, :create, :update, :destroy] do
+    resources :tasks, only: [:create, :update, :destroy] do
       patch 'update_task_prioity' => 'tasks#update_task_priority', on: :member
     end
   end

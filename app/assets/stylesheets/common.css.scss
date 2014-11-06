@@ -14,26 +14,21 @@
    user-select: none;
 }
 
-body {
+html, body {
   background: -webkit-linear-gradient(#DEDEDE, #DBD4C1, #EBCF83, #E69D00); /* For Safari 5.1 to 6.0 */
   background: -o-linear-gradient( #DEDEDE, #DBD4C1, #EBCF83, #E69D00); /* For Opera 11.1 to 12.0 */
   background: -moz-linear-gradient(#DEDEDE, #DBD4C1, #EBCF83, #E69D00); /* For Firefox 3.6 to 15 */
   background: linear-gradient( #DEDEDE, #DBD4C1, #EBCF83, #E69D00); /* Standard syntax (must be last) */
+  background-attachment: fixed;
 }
 
 #sign-out {
   margin-bottom: 5em;
 }
 
-header {
+#main header {
   margin-top: 3em;
   margin-bottom: 5em; 
 }
 
-/*.verticalLine {
-  border-left: 1px solid red ;
-  min-width: 3px;
-  min-height: 600px;
-  display: inline;
-}*/
-/*E3E3E3*/
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }

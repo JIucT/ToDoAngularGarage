@@ -1,4 +1,4 @@
-var todoApp = angular.module('todoListApp', ["xeditable", "ngAnimate", "ui.sortable"/*, "ui.sortable"*/]);
+var todoApp = angular.module('todoListApp', ["xeditable", "ngAnimate", "ui.sortable", "ui.bootstrap"]);
 
 todoApp.config  (function($httpProvider) {
   authToken = $("meta[name=\"csrf-token\"]").attr("content");
@@ -12,8 +12,25 @@ todoApp.run(function(editableOptions) {
 todoApp.controller('ProjectsCtrl', function ($scope, $http, $timeout) {
 
   $http.get('/projects.json').success(function(data) {
-    $scope.projects = data;
+    // for(var j=0;j<data.projects;j++) {
+    //   for(var i=0;i<data.projects[j].tasks.length;i++) {
+    //     data.projects[j].tasks[i].isOpen = false;
+    //   }
+    // }
+    $scope.projects = data;  
   });
+
+  $scope.taskValid = function(newTitle, project) {
+    if (newTitle.length < 4) {
+      return false;
+    }    
+    for(var i=0; i<project.tasks.length;i++) {
+      if (project.tasks[i].title == newTitle) {
+        return false;
+      }
+    }    
+    return true;
+  }
 
   $scope.addProject = function(){
     $http.post("/projects", { project: { title: "Enter project name" } })
@@ -25,13 +42,11 @@ todoApp.controller('ProjectsCtrl', function ($scope, $http, $timeout) {
       });
   }
 
-  $scope.remove = function(event) {
+  $scope.remove = function(project) {
     if(confirm('All project data will be deleted')) {
-      var element = angular.element(event.target);
-      var id = element.data('value');
-      var projectElement = element.parent().parent().parent().parent();
+      var id = project.id;
       $http.delete("/projects/"+id, { project: { id: id }});
-      projectElement.remove();
+      $scope.projects.splice($scope.projects.indexOf(project), 1);
     }
   }
 
@@ -40,18 +55,17 @@ todoApp.controller('ProjectsCtrl', function ($scope, $http, $timeout) {
   }
 
   $scope.addTask = function(event, project) {
-    var element = angular.element(event.target);
     var inputElem = angular.element(".task-name[data-name='" + project.id + "']");    
-    if (inputElem.val().length < 4) {
+    if (!$scope.taskValid(inputElem.val(), project)) {
       inputElem.css("border-color", "red");
-      inputElem.css("border-size", "3px");
+      inputElem.css("border-width", "2px");
     } else {
       $http.post("/projects/"+project.id+"/tasks", { 
         task: { title: inputElem.val(), project_id: project.id }})
         .success(function(data, status, headers, config) {
-          project.tasks.push(data);
-          inputElem.css("border-color", "#CCCCCC");
-          inputElem.css("border-size", "1px");
+          $scope.projects[$scope.projects.indexOf(project)].tasks = data;
+          inputElem.val('');
+          inputElem.css("border-width", "0px");
           $timeout(function() {
             $scope.$apply(); 
           });             
@@ -83,15 +97,20 @@ todoApp.controller('ProjectsCtrl', function ($scope, $http, $timeout) {
       });
   }
 
+  $scope.validateTaskTitle = function(project) {
+    var editableInput = angular.element(".task-data form input");
+    if (!$scope.taskValid(editableInput.val(), project)) {
+      return false;    
+    }
+  }
+
   $scope.updateTaskTitle = function(task) {
-    console.log("alala");
     $http.patch("/projects/"+task.project_id+"/tasks/"+ task.id, { task: { title: task.title, id: task.id } });
   }
 
   $scope.removeTask = function(event, task, project) {
     if(confirm('All task data will be deleted')) {
       $http.delete("/projects/"+task.project_id+"/tasks/"+ task.id);
-      // angular.element(event.target).remove();
       for (var i in project.tasks) {
         if (project.tasks[i].priority > task.priority) {
           project.tasks[i].priority--;
@@ -101,39 +120,80 @@ todoApp.controller('ProjectsCtrl', function ($scope, $http, $timeout) {
     }
   }
 
-  $scope.dragControlListeners = {
-      accept: function (sourceItemHandleScope, destSortableScope) {
-        return sourceItemHandleScope.itemScope.sortableScope.$id === destSortableScope.$id;
-      },
-      orderChanged: function(event) {
-        var changedTask = event.source.itemScope.task;
-        var project = event.source.itemScope.project;
-        var newPriority = project.tasks.length - (event.dest.index+1);
-        var oldPriority = changedTask.priority;
-        var tasks = project.tasks;
-        for (var i=0; i<tasks.length; i++) {
-          if ((tasks[i].priority>oldPriority) && (tasks[i].priority<=newPriority)){
-            tasks[i].priority--;
-          } else if ((tasks[i].priority<=oldPriority) && (tasks[i].priority>=newPriority)) {
-            console.log("aaka");
-            tasks[i].priority++;
-          }
-        }
-        tasks[tasks.indexOf(changedTask)].priority = newPriority;
-        $scope.projects[$scope.projects.indexOf(project)].tasks = tasks;
+  $scope.changeTaskDeadline = function(task) {
+    $http.patch("/projects/"+task.project_id+"/tasks/"+ task.id, { task: { 
+      deadline: task.deadline.getFullYear().toString() + '-' +
+      (task.deadline.getMonth()+1).toString() + '-' + 
+      task.deadline.getDate().toString(), id: task.id } });
+    /*  .getMonth()+1 task.deadline.getDate()*/
+  }
 
-        changedTask.priority = project.tasks.length - (event.dest.index+1);
-        console.log(event.dest.index);
-        $http.patch("/projects/"+changedTask.project_id+"/tasks/"+changedTask.id+
-          "/update_task_prioity", { 
-          task: { project_id: changedTask.project_id, id: changedTask.id, 
-          priority: (project.tasks.length - (event.dest.index+1)) }})
-          .success(function(data, status, headers, config) {
-            $scope.projects[$scope.projects.indexOf(project)].tasks = data;
-          })
-      },
-      containment: '#board'//optional param.
+
+  $scope.dragControlListeners = {
+    accept: function (sourceItemHandleScope, destSortableScope) {
+      return sourceItemHandleScope.itemScope.sortableScope.$id === destSortableScope.$id;
+    },
+    orderChanged: function(event) {
+      var changedTask = event.source.itemScope.task;
+      var project = event.source.itemScope.project;
+      var newPriority = project.tasks.length - (event.dest.index+1);
+      var oldPriority = changedTask.priority;
+      var tasks = project.tasks;
+      for (var i=0; i<tasks.length; i++) {
+        if ((tasks[i].priority>oldPriority) && (tasks[i].priority<=newPriority)){
+          tasks[i].priority--;
+        } else if ((tasks[i].priority<=oldPriority) && (tasks[i].priority>=newPriority)) {
+          tasks[i].priority++;
+        }
+      }
+      tasks[tasks.indexOf(changedTask)].priority = newPriority;
+      $scope.projects[$scope.projects.indexOf(project)].tasks = tasks;
+
+      changedTask.priority = project.tasks.length - (event.dest.index+1);
+      $http.patch("/projects/"+changedTask.project_id+"/tasks/"+changedTask.id+
+        "/update_task_prioity", { 
+        task: { project_id: changedTask.project_id, id: changedTask.id, 
+        priority: (project.tasks.length - (event.dest.index+1)) }})
+        .success(function(data, status, headers, config) {
+          $scope.projects[$scope.projects.indexOf(project)].tasks = data;
+        })
+    },
+    containment: '#board'//optional param.
   };
+
+
+//*****************Datepicker***********
+  $scope.today = function() {
+    $scope.dt = new Date();
+  };
+  $scope.today();
+
+  $scope.clear = function () {
+    $scope.dt = null;
+  };
+
+  $scope.toggleMin = function() {
+    $scope.minDate = $scope.minDate ? null : new Date();
+  };
+  $scope.toggleMin();
+
+  $scope.open = function($event, task) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    task.isOpen = true;
+  };
+
+  $scope.dateOptions = {
+    formatYear: 'yy',
+    startingDay: 1,
+    showWeeks: false
+  };
+
+  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  $scope.format = $scope.formats[3];
+
+
 
 });
 

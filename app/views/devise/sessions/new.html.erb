@@ -30,7 +30,7 @@
       </div>
     <% end %>    
     <div class="sign-menu">
-      <%= link_to "Sign in with facebook", '#' %><br/>
+      <%= link_to "Sign in with facebook", user_omniauth_authorize_path(:facebook) %><br/>
       <%= link_to "Sign Up", new_user_registration_path %> 
     </div>
     <%= f.submit "Sign in", class: "btn btn-default", id: "submit-login" %>

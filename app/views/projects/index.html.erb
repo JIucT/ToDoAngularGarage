@@ -5,22 +5,22 @@
   <div class="projects-container ng-scope panel panel-default text-left" ng-repeat="project in projects | orderBy: 'created_at':true">
     <div class="panel-heading">
       <span class="glyphicon glyphicon-tasks"></span>
-      <b class="project-name" data-value="{{project.id}}" editable-text="project.title" e-form="PojectTitleForm" onaftersave="updateTitle(poject.id)">{{project.title}}</b>
+      <b class="project-name" data-value="{{project.id}}" editable-text="project.title" e-form="PojectTitleForm" onaftersave="updateTitle(project.id)">{{project.title}}</b>
       <div class="pull-right">
-        <a class="show-on-hover" href=""><span class="glyphicon glyphicon-pencil" ng-click="PojectTitleForm.$show()" ng-hide="PojectTitleForm.$visible"></span></a>
-        <a class="show-on-hover" href="" ng-click="remove($event)"><span data-value="{{project.id}}" class="glyphicon glyphicon-trash"></span></a>
+        <a class="show-on-hover edit-project-title" href=""><span class="glyphicon glyphicon-pencil" ng-click="PojectTitleForm.$show()" ng-hide="PojectTitleForm.$visible"></span></a>
+        <a class="show-on-hover" href="" ng-click="remove(project)"><span data-value="{{project.id}}" class="glyphicon glyphicon-trash"></span></a>
       </div>
     </div>
-    <div class="panel-body">
+    <div class="panel-body" data-value="{{project.id}}">
       <span class="glyphicon glyphicon-plus pull-left"></span>
       <form>
-      <div class="input-group">
-        <input placeholder="Start typing here to create a task..." type="text" data-name="{{project.id}}" class="task-name form-control">
-        <span class="input-group-btn">
-          <button type="submit" class="btn btn-default" data-value="{{project.id}}" ng-click="addTask($event, project)">Add Task</button>
-        </span>
-      </div><!-- /input-group -->
-    </form>
+        <div class="input-group">
+          <input placeholder="Start typing here to create a task..." type="text" data-name="{{project.id}}" class="task-name form-control">
+          <span class="input-group-btn">
+            <button type="submit" class="btn btn-default new-task-btn" data-value="{{project.id}}" ng-click="addTask($event, project)">Add Task</button>
+          </span>
+        </div><!-- /input-group -->
+      </form>
     </div>    
     <table class="table tasks-table" data-as-sortable="dragControlListeners" data-ng-model="project.tasks">
       <tr ng-repeat="task in project.tasks | orderBy: 'priority':true" data-as-sortable-item ng-class="{'last-row':$last}">   
@@ -29,14 +29,22 @@
         </td>
         <td class="td-space"></td>
         <td data-as-sortable-item-handle class="unselectable task-data">
-          <b id="{{task.id}}" class="unselectable line-through-{{task.completed}}" editable-text="task.title" e-form="TaskTitleForm" onaftersave="updateTaskTitle(task)">
-            {{task.title}} {{task.priority}}
+          <b id="{{task.id}}" class="unselectable line-through-{{task.completed}}" editable-text="task.title" e-form="TaskTitleForm" onbeforesave="validateTaskTitle(project)" onaftersave="updateTaskTitle(task)"> {{task.title}}
           </b>          
           <a class="show-on-hover" href=""><span class="glyphicon glyphicon-pencil" ng-click="TaskTitleForm.$show()" ng-hide="TaskTitleForm.$visible"></span></a>
         </td>
-        <td data-as-sortable-item-handle class="task-actions">
-          <a class="show-on-hover" href="" ng-click="removeTask($event, task, project)"><span class="glyphicon glyphicon-trash"></span></a>                    
+        <td class="task-deadline">
+          <p class="input-group">
+            <input placeholder="Enter task deadline..." type="text" readonly="readonly" tabindex="-1" class="form-control input-sm" datepicker-popup="{{format}}" ng-model="task.deadline" is-open="task.isOpen" min-date="minDate" max-date="'2099-06-22'" datepicker-options="dateOptions" close-text="Close" ng-change="changeTaskDeadline(task)" >
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default btn-sm" ng-click="open($event, task)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </p>
         </td>        
+        <td data-as-sortable-item-handle class="task-actions">
+          <a class="show-on-hover" href="" ng-click="removeTask($event, task, project)"><span class="remove-task glyphicon glyphicon-trash"></span></a>                    
+        </td>        
+
       </tr>
     </table>    
   </div>
