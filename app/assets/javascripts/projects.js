@@ -155,17 +155,23 @@ todoApp.controller('ProjectsCtrl', function ($scope, $http, $timeout) {
       processData: false,
       contentType: false
     }).done(function(data){
+      angular.element(".file-input-label-"+task.id).val('');
       comentElem.val('');
       task.comments.push(data);      
       $timeout(function(){
         $scope.$apply(); 
         var commentsElem = $(".comments-row-" + task.id);
-        console.log(commentsElem);
         commentsElem.css("display", "table-row");        
       }, 1);          
     });
   }
 
+  $scope.removeComment = function(event, comment, task) {
+    if(confirm('All comment data will be deleted')) {
+      $http.delete("/projects/"+task.project_id+"/tasks/"+task.id+"/comments/"+comment.id);
+      task.comments.splice(task.comments.indexOf(comment), 1);
+    }
+  }  
 
   $scope.dragControlListeners = {
     accept: function (sourceItemHandleScope, destSortableScope) {

@@ -71,8 +71,15 @@
         </tr>
         <tr data-as-sortable-item-handle ng-repeat="comment in task.comments | orderBy: 'created_at':true" class="unvisible comments-row-{{task.id}}" >
           <td class="task-completion"></td>
-          <td class="unselectable comment-text" colspan="3"><div class="well well-sm">{{comment.text}}</div></td>
-          <td class="comment-actions"></td>
+          <td class="unselectable comment-text" colspan="2"><div class="well well-sm">{{comment.text}}</div></td>
+          <td class="comment-image">
+            <a href="{{comment.file_full_url}}" target="_blank" class="pull-right">
+              <img src="{{comment.file_thumb_url}}" />
+            </a>
+          </td>
+          <td class="comment-actions">
+            <a class="show-on-hover" href="" ng-click="removeComment($event, comment, task)"><span class="remove-comment glyphicon glyphicon-trash"></span></a>
+          </td>
         </tr>
       </tbody>
     </table>    

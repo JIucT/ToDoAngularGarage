@@ -18,7 +18,7 @@
   width: 1%;
 }
 
-.comment-text {
+.comment-text, .comment-image {
   padding-top: 2px !important;
   padding-bottom: 2px !important;
 }
@@ -27,9 +27,11 @@
   margin: 0px;
   padding-top: 4px !important;
   padding-bottom: 4px !important;  
+  width: 135%;
 }
 
 .comment-actions {
-  width: 7% !important;
+  text-align: center;
   border-left: 1px solid #E3E3E3;
 }
+
