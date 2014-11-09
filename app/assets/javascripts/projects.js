@@ -12,11 +12,6 @@ todoApp.run(function(editableOptions) {
 todoApp.controller('ProjectsCtrl', function ($scope, $http, $timeout) {
 
   $http.get('/projects.json').success(function(data) {
-    // for(var j=0;j<data.projects;j++) {
-    //   for(var i=0;i<data.projects[j].tasks.length;i++) {
-    //     data.projects[j].tasks[i].isOpen = false;
-    //   }
-    // }
     $scope.projects = data;  
   });
 
@@ -63,7 +58,7 @@ todoApp.controller('ProjectsCtrl', function ($scope, $http, $timeout) {
       $http.post("/projects/"+project.id+"/tasks", { 
         task: { title: inputElem.val(), project_id: project.id }})
         .success(function(data, status, headers, config) {
-          $scope.projects[$scope.projects.indexOf(project)].tasks = data;
+          project.tasks = data;
           inputElem.val('');
           inputElem.css("border-width", "0px");
           $timeout(function() {
@@ -125,7 +120,50 @@ todoApp.controller('ProjectsCtrl', function ($scope, $http, $timeout) {
       deadline: task.deadline.getFullYear().toString() + '-' +
       (task.deadline.getMonth()+1).toString() + '-' + 
       task.deadline.getDate().toString(), id: task.id } });
-    /*  .getMonth()+1 task.deadline.getDate()*/
+  }
+
+  $scope.showComments = function(task) {
+    var commentsElem = angular.element(".comments-row-" + task.id);
+    if (commentsElem.css("display") == 'none' ){
+      commentsElem.css("display", "table-row");  
+    } else {
+      commentsElem.css("display", "none");
+    }
+  }
+
+  $scope.onCommentAttachment = function(element, scope) {
+     $scope.$apply(function(scope) {
+        var elem = angular.element(".file-input-label-" + element.attributes['data'].value).val(element.files[0].name);
+     });
+  }
+
+  $scope.addComment = function(event, task) {
+    var comentElem = angular.element("#comment-"+task.id);
+    if (comentElem.val().length < 4) {
+      comentElem.css("border-color", "red");
+      comentElem.css("border-width", "2px");
+      return false;
+    } else {
+      comentElem.css("border-color", "#CCCCCC");
+      comentElem.css("border-width", "1px");      
+    }
+
+    $.ajax( {
+      url: "/projects/"+task.project_id+"/tasks/"+task.id+"/comments",
+      type: 'POST',
+      data: new FormData( event.target ),     
+      processData: false,
+      contentType: false
+    }).done(function(data){
+      comentElem.val('');
+      task.comments.push(data);      
+      $timeout(function(){
+        $scope.$apply(); 
+        var commentsElem = $(".comments-row-" + task.id);
+        console.log(commentsElem);
+        commentsElem.css("display", "table-row");        
+      }, 1);          
+    });
   }
 
 
@@ -192,8 +230,6 @@ todoApp.controller('ProjectsCtrl', function ($scope, $http, $timeout) {
 
   $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
   $scope.format = $scope.formats[3];
-
-
 
 });
 

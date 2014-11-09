@@ -8,7 +8,7 @@
   color: #858585;
 }
 
-.tasks-table {
+.tasks-table tbody:first-child tr:first-child {
   box-shadow: 0px 2px 1px #B3B3B3 inset !important;
 }
 
@@ -40,7 +40,7 @@
 }
 
 .task-actions {
-  width: 7%;
+  width: 11%;
   border-left: 1px solid #E3E3E3;
 }
 
@@ -51,7 +51,7 @@
 
 .task-data a {
   position: relative;
-  left: 207px;/*40px;*/
+  left: 252px;/*40px;*/
 }
 
 .task-data {
@@ -66,7 +66,7 @@
   visibility: visible;
 };
 
-.tasks-table tr:hover td {
+.tasks-table tr.task-row:hover td {
   background-color: #FCF8D9 !important;
 }
 
@@ -78,6 +78,10 @@
   color: black;
 }
 
+.tasks-table a:active {
+  color: #787878 !important;
+}
+
 .tasks-table td b {
   margin-left: 10px;
 }
@@ -86,10 +90,13 @@
   width: 25%;
   padding-top: 5px !important;
   padding-bottom: 0px !important;
-  text-align: center !important;
 }
 
 .task-deadline .input-group {
   margin: 0px; 
   max-height: 10px !important;  
+}
+
+.task-deadline .input-group input {
+  text-align: center !important;
 }

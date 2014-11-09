@@ -2,10 +2,11 @@ class ProjectsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @projects = Project.includes(:tasks).where(user_id: current_user.id).order("created_at DESC")
+    @projects = Project.includes(:tasks).includes(:comments).where(user_id: current_user.id).order("created_at DESC")
+    @comment = Comment.new
     respond_to do |format|
       format.html
-      format.json { render json: @projects.to_json(include: :tasks) }
+      format.json { render json: @projects.to_json(include: { tasks: { include: :comments }}) }
     end    
   end
 

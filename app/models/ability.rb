@@ -7,6 +7,9 @@ class Ability
       user ||= User.new # guest user (not logged in)
       can :manage, Project, user_id: user.id
       can :manage, Task, user_id: user.id
+      can :manage, Comment do |comment| 
+        comment.task.user_id == user.id
+      end
     #
     # The first argument to `can` is the action you are giving the user
     # permission to do.

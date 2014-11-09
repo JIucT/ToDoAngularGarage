@@ -23,29 +23,58 @@
       </form>
     </div>    
     <table class="table tasks-table" data-as-sortable="dragControlListeners" data-ng-model="project.tasks">
-      <tr ng-repeat="task in project.tasks | orderBy: 'priority':true" data-as-sortable-item ng-class="{'last-row':$last}">   
-        <td data-as-sortable-item-handle class="task-completion">
-          <input type="checkbox" ng-model="task.completed" ng-change="changeTaskState(task)" />
-        </td>
-        <td class="td-space"></td>
-        <td data-as-sortable-item-handle class="unselectable task-data">
-          <b id="{{task.id}}" class="unselectable line-through-{{task.completed}}" editable-text="task.title" e-form="TaskTitleForm" onbeforesave="validateTaskTitle(project)" onaftersave="updateTaskTitle(task)"> {{task.title}}
-          </b>          
-          <a class="show-on-hover" href=""><span class="glyphicon glyphicon-pencil" ng-click="TaskTitleForm.$show()" ng-hide="TaskTitleForm.$visible"></span></a>
-        </td>
-        <td class="task-deadline">
-          <p class="input-group">
-            <input placeholder="Enter task deadline..." type="text" readonly="readonly" tabindex="-1" class="form-control input-sm" datepicker-popup="{{format}}" ng-model="task.deadline" is-open="task.isOpen" min-date="minDate" max-date="'2099-06-22'" datepicker-options="dateOptions" close-text="Close" ng-change="changeTaskDeadline(task)" >
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-default btn-sm" ng-click="open($event, task)"><i class="glyphicon glyphicon-calendar"></i></button>
-            </span>
-          </p>
-        </td>        
-        <td data-as-sortable-item-handle class="task-actions">
-          <a class="show-on-hover" href="" ng-click="removeTask($event, task, project)"><span class="remove-task glyphicon glyphicon-trash"></span></a>                    
-        </td>        
-
-      </tr>
+      <tbody ng-repeat="task in project.tasks | orderBy: 'priority':true" data-as-sortable-item>
+        <tr data-as-sortable-item-handle class="task-row" ng-class="{'last-row':$last}">   
+          <td class="task-completion">
+            <input type="checkbox" ng-model="task.completed" ng-change="changeTaskState(task)" />
+          </td>
+          <td class="td-space"></td>
+          <td class="unselectable task-data">
+            <b id="{{task.id}}" class="unselectable line-through-{{task.completed}}" editable-text="task.title" e-form="TaskTitleForm" onbeforesave="validateTaskTitle(project)" onaftersave="updateTaskTitle(task)"> {{task.title}}
+            </b>          
+            <a class="show-on-hover" href=""><span class="glyphicon glyphicon-pencil" ng-click="TaskTitleForm.$show()" ng-hide="TaskTitleForm.$visible"></span></a>
+          </td>
+          <td class="task-deadline">
+            <p class="input-group">
+              <input placeholder="Enter task deadline..." type="text" readonly tabindex="-1" class="form-control input-sm" datepicker-popup="{{format}}" ng-model="task.deadline" is-open="task.isOpen" min-date="minDate" max-date="'2099-06-22'" datepicker-options="dateOptions" close-text="Close" ng-change="changeTaskDeadline(task)" >
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default btn-sm" ng-click="open($event, task)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p>
+          </td>        
+          <td class="task-actions">
+            <a class="show-on-hover" href="" ng-click="removeTask($event, task, project)"><span class="remove-task glyphicon glyphicon-trash"></span></a>
+            <a class="show-on-hover" href="" ng-click="showComments(task)"><span class="glyphicon glyphicon-comment"></span></a>          
+          </td>        
+        </tr>
+        <tr data-as-sortable-item-handle class="comments-row-{{task.id}} unvisible">
+          <td class="task-completion"></td>
+          <td class="td-space"></td>
+          <td colspan="3" class="add-comment unselectable">
+            <form class="form-inline new-comment-form-{{task.id}} pull-right" role="form" ng-submit="addComment($event, task)" method="post" enctype="multipart/form-data">
+              <div class="form-group">
+                <label class="sr-only" for="comment-{{task.id}}">Email address</label>
+                <input placeholder="Start typing here to add a comment..."  id="comment-{{task.id}}" autocomplete="off" type="text" class="input-sm form-control new-comment-text" name="comment">
+              </div>              
+            <div class="input-group">        
+              <span class="input-group-btn">                  
+                <span class="btn btn-default btn-sm btn-file">
+                  Attach image <input type="file" name="file" data="{{task.id}}" onchange="angular.element(this).scope().onCommentAttachment(this)" />
+                </span>
+              </span>
+              <input type="text" class="form-control input-sm file-input-label-{{task.id}}" readonly>
+            </div>
+              <button type="submit" class="btn btn-default btn-sm">Add Comment</button>
+            </div><!-- /input-group -->
+            </form>            
+          </td>
+        </tr>
+        <tr data-as-sortable-item-handle ng-repeat="comment in task.comments | orderBy: 'created_at':true" class="unvisible comments-row-{{task.id}}" >
+          <td class="task-completion"></td>
+          <td class="unselectable comment-text" colspan="3"><div class="well well-sm">{{comment.text}}</div></td>
+          <td class="comment-actions"></td>
+        </tr>
+      </tbody>
     </table>    
   </div>
   <button ng-click="addProject()" type="button" class="btn btn-primary">Add TODO List</button>

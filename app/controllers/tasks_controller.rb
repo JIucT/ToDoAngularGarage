@@ -8,16 +8,16 @@ class TasksController < ApplicationController
     new_priority = task_params[:priority].to_i
     tasks = Task.recount_priorities(task_params[:project_id], old_priority, new_priority)
     task.update(priority: new_priority)    
-    render json: tasks
+    render json: tasks.to_json(include: :comments)
   end
 
   def create
-    project_tasks = Task.where(project_id: task_params[:project_id])
+    project_tasks = Task.includes(:comments).where(project_id: task_params[:project_id])
     priority = project_tasks.count
     task = Task.new({ project_id: task_params[:project_id],
       title: task_params[:title], priority: priority, user_id: current_user.id })
     if task.save
-      render json: project_tasks
+      render json: project_tasks.to_json(include: :comments)
     else
       render nothing: true, status: 500
     end

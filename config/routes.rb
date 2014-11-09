@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :projects, only: [:index, :create, :update, :destroy] do
     resources :tasks, only: [:create, :update, :destroy] do
       patch 'update_task_prioity' => 'tasks#update_task_priority', on: :member
+      resources :comments, only: [:create, :update, :destroy]
     end
   end
   # Example of regular route:
