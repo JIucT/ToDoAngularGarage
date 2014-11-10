@@ -18,6 +18,5 @@
 //= require xeditable
 //= require ng-sortable
 //= require ui-bootstrap-tpls-0.11.2
-// require filestyle
 //= require jquery_ujs
 //= require_tree .
