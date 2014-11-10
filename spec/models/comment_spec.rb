@@ -1,5 +1,13 @@
-require 'rails_helper'
-
 RSpec.describe Comment, :type => :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:comment) { FactoryGirl.create(:comment) }
+
+  context "validation" do
+    it { expect(comment).to validate_presence_of(:text) }
+    it { expect(comment).to validate_uniqueness_of(:text).scoped_to(:task_id) }
+  end
+
+  context "relation" do
+    it { expect(comment).to belong_to(:task) }
+  end
+
 end

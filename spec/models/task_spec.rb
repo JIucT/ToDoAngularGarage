@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe Task, :type => :model do
   let(:task) { FactoryGirl.create(:task) }
 
@@ -9,6 +7,7 @@ RSpec.describe Task, :type => :model do
     it { expect(task).to ensure_length_of(:title) }
     it { expect(task).to validate_presence_of(:priority) }
     it { expect(task).to validate_presence_of(:project_id) }
+    it { expect(task).to have_many(:comments).dependent(:destroy) }
   end
 
   context "relation" do

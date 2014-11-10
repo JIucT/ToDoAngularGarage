@@ -1,4 +1,3 @@
-require 'rails_helper'
 
 RSpec.describe Project, :type => :model do
   let(:project) { FactoryGirl.create(:project) }
@@ -11,6 +10,7 @@ RSpec.describe Project, :type => :model do
   context "relation" do
     it { expect(project).to belong_to(:user) }
     it { expect(project).to have_many(:tasks).dependent(:destroy) }
+    it { expect(project).to have_many(:comments).through(:tasks) }
 
     it "should be able to create a new task" do
       task = project.tasks.new(FactoryGirl.attributes_for(:task, user: project.user))

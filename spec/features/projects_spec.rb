@@ -1,4 +1,3 @@
-#require 'spec_helper'
 
 feature "Projects actions" do
   let(:user) do 

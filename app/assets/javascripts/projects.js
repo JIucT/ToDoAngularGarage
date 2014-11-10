@@ -156,6 +156,7 @@ todoApp.controller('ProjectsCtrl', function ($scope, $http, $timeout) {
       contentType: false
     }).done(function(data){
       angular.element(".file-input-label-"+task.id).val('');
+      angular.element(".comment-file-"+task.id).val('');
       comentElem.val('');
       task.comments.push(data);      
       $timeout(function(){

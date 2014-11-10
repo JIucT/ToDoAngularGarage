@@ -1,4 +1,3 @@
-require 'rails_helper'
 require "cancan/matchers"
 
 RSpec.describe User, :type => :model do
@@ -27,5 +26,8 @@ RSpec.describe User, :type => :model do
 
     it { expect(ability).to be_able_to(:manage, user.tasks.first) }
     it { expect(ability).not_to be_able_to(:read, Task.new(user: FactoryGirl.create(:user))) }    
+
+    it { expect(ability).to be_able_to(:manage, user.tasks.first.comments.first) }
+    it { expect(ability).not_to be_able_to(:read, Comment.new(task: FactoryGirl.create(:user).tasks.first)) }      
   end    
 end

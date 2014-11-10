@@ -59,13 +59,13 @@
             <div class="input-group">        
               <span class="input-group-btn">                  
                 <span class="btn btn-default btn-sm btn-file">
-                  Attach image <input type="file" name="file" data="{{task.id}}" onchange="angular.element(this).scope().onCommentAttachment(this)" />
+                  Attach image <input type="file" name="file" class="comment-file-{{task.id}}" data="{{task.id}}" onchange="angular.element(this).scope().onCommentAttachment(this)" />
                 </span>
               </span>
               <input type="text" class="form-control input-sm file-input-label-{{task.id}}" readonly>
             </div>
               <button type="submit" class="btn btn-default btn-sm">Add Comment</button>
-            </div><!-- /input-group -->
+            </div>
             </form>            
           </td>
         </tr>
@@ -73,8 +73,8 @@
           <td class="task-completion"></td>
           <td class="unselectable comment-text" colspan="2"><div class="well well-sm">{{comment.text}}</div></td>
           <td class="comment-image">
-            <a href="{{comment.file_full_url}}" target="_blank" class="pull-right">
-              <img src="{{comment.file_thumb_url}}" />
+            <a ng-href="{{comment.file_full_url}}" target="_blank" class="pull-right">
+              <img ng-src="{{comment.file_thumb_url}}" />
             </a>
           </td>
           <td class="comment-actions">

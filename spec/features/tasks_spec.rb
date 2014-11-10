@@ -28,9 +28,18 @@ feature "Tasks actions" do
   scenario "User deletes task", js: true do
     first('.panel-body .task-name').set("Task to delete")
     first('.new-task-btn').click
+    page.evaluate_script('window.confirm = function() { return true; }')    
     page.execute_script("$('.tasks-table .remove-task').first().click()")
-    page.driver.browser.switch_to.alert.accept
+    # page.driver.browser.switch_to.alert.accept
     expect(page).not_to have_content('Task to delete')
+  end
+
+  scenario "User sets task deadline", js: true do
+    first('.panel-body .task-name').set("Task to deadline")
+    first('.new-task-btn').click
+    first('.task-deadline button').click
+    click_button (Date.today + 1.day).day.to_s
+    expect(first('.task-deadline input.form-control').value).to match((Date.today + 1.day).strftime("%m/%d/%y"))
   end
 
   # scenario "User changes task priority", js: true do

@@ -17,14 +17,16 @@
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
-# require 'capybara/rspec'
-# require 'capybara/rails'
+ # require 'capybara/rspec'
+ # require 'capybara/rails'
 
 include Capybara::Angular::DSL
 include Warden::Test::Helpers
 Warden.test_mode!
 Capybara.default_wait_time = 30
 
+# ActiveRecord::Migration.maintain_test_schema!
+# ActiveRecord::Migration.check_pending!
 
 RSpec.configure do |config|
 
@@ -105,9 +107,8 @@ RSpec.configure do |config|
 
   config.use_transactional_fixtures = false
 
-
-
   Capybara.javascript_driver = :selenium
+  Capybara.raise_server_errors = false
 
   config.before(:suite) do
     # This says that before the entire test suite runs, clear the test database out completely.

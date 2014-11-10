@@ -42,20 +42,27 @@
 .task-actions {
   width: 11%;
   border-left: 1px solid #E3E3E3;
+  text-vertical-align: bottom !important;
+  vertical-align: bottom !important;
 }
 
 .task-data a, .task-actions a {
   float: right;
   margin: 0px 5px 0px 5px;
+  text-vertical-align: bottom !important;
+  vertical-align: bottom !important;
 }
 
 .task-data a {
   position: relative;
   left: 252px;/*40px;*/
+
 }
 
 .task-data {
   border-left: 1px solid #E3E3E3;  
+  max-width: 60% !important;
+  word-break: break-all;
 }
 
 .show-on-hover {
@@ -79,6 +86,10 @@
 }
 
 .tasks-table a:active {
+  color: #787878 !important;
+}
+
+.tasks-table a:visited {
   color: #787878 !important;
 }
 

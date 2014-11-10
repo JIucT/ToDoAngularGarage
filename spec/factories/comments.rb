@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :comment do
-    task nil
-text "MyString"
+    text { Faker::Lorem.paragraph(2, false, 2) }
+    task { FactoryGirl.create(:task) }
   end
 
 end
