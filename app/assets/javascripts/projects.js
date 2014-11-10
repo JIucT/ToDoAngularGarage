@@ -1,13 +1,13 @@
 var todoApp = angular.module('todoListApp', ["xeditable", "ngAnimate", "ui.sortable", "ui.bootstrap"]);
 
-/*todoApp.config  (['$httpProvider', function($httpProvider) {
+todoApp.config  (['$httpProvider', function($httpProvider) {
   authToken = $("meta[name=\"csrf-token\"]").attr("content");
   $httpProvider.defaults.headers.common["X-CSRF-TOKEN"] = authToken;
-}]);*/
+}]);
 
-// todoApp.run(function(editableOptions) {
-//   editableOptions.theme = 'bs3';
-// });
+todoApp.run(['editableOptions', function(editableOptions) {
+  editableOptions.theme = 'bs3';
+}]);
 
 todoApp.controller('ProjectsCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
