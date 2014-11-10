@@ -9,7 +9,7 @@ todoApp.run(function(editableOptions) {
   editableOptions.theme = 'bs3';
 });
 
-todoApp.controller('ProjectsCtrl', function ($scope, $http, $timeout) {
+todoApp.controller('ProjectsCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
   $http.get('/projects.json').success(function(data) {
     $scope.projects = data;  
@@ -238,9 +238,5 @@ todoApp.controller('ProjectsCtrl', function ($scope, $http, $timeout) {
   $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
   $scope.format = $scope.formats[3];
 
-});
+}]);
 
-
-todoApp.controller('TasksCtrl', function ($scope, $http) {
-
-})
